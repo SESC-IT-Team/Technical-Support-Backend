@@ -21,3 +21,4 @@ class CreateOrderResponse(BaseModel):
     status: str
     created_at: datetime
     finished_at: datetime
+

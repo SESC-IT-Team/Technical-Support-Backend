@@ -6,6 +6,7 @@ import uuid
 from sqlalchemy.orm import Session
 
 from orders.order_schemas import CreateOrderRequest, CreateOrderResponse
+from enums import Status
 
 router = APIRouter()
 
@@ -50,7 +51,7 @@ def get_orders(data: CreateOrderRequest, db: Session = Depends(get_db)):
 def change_status(data: CreateOrderResponse, db: Session = Depends(get_db)):
     return change_status(
         id=uuid.uuid4(),
-        status="not started", # даня сказал сделать так
+        status=Status.NOT_STARTED,# даня сказал сделать так
 
 
     )
@@ -60,5 +61,7 @@ def set_worker(data: CreateOrderResponse, db: Session = Depends(get_db)):
     return set_worker(
         id=uuid.uuid4(),
         worker=uuid.uuid4(),
-
+        status=Status.NOT_STARTED,
     )
+
+
