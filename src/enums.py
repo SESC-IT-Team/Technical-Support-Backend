@@ -10,3 +10,12 @@ class Role(Enum):
     SUPER_ADMIN = "super_admin"
     ADMIN = "admin"
     USER = "user"
+
+class OrdersQuery(Enum):
+    ALL = "all"
+    TODO = "todo"
+    MY = "my"
+
+class SortOrder(Enum):
+    ASC = "asc"
+    DESC = "desc"

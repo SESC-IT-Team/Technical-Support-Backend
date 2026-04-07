@@ -14,4 +14,3 @@ class Settings(BaseSettings):
         return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
 
 settings = Settings()
-print(settings.database_url)
