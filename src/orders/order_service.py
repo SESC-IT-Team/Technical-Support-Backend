@@ -46,3 +46,5 @@ class OrderService:
             order_id=data.order_id,
             department_id=data.department_id
         )
+def get_order_service():
+    return OrderService(OrderRepository())

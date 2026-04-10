@@ -5,84 +5,31 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends, APIRouter
 
 from src.database.session import get_db
-from src.orders.order_schemas import CreateOrderRequest, OrderItem, GetOrdersResponse
+from src.orders.order_schemas import CreateOrderRequest, OrderItem, GetOrdersResponse, SetDepartmentRequest, \
+    OrderFilter, UpdateOrderStatusRequest, SetWorkerRequest
 from src.enums import Status
-
+from src.orders.order_service import get_order_service, OrderService
 
 router = APIRouter()
 
 @router.post("/create_orders")
-def create_order(data: CreateOrderRequest, db: AsyncSession = Depends(get_db)):
-    return OrderItem(
-        order_id= uuid.uuid4(),
-        department_id = data.department_id,
-        from_user_id = uuid.uuid4(),
-        worker_id= uuid.uuid4(),
-        title = data.title,
-        description = data.description,
-        status = Status.NOT_STARTED,
-        created_at = datetime(2026,3,13,17,17,17),
-        finished_at = None
-    )
+def create_order(data: CreateOrderRequest, db: AsyncSession = Depends(get_db), service: OrderService = Depends(get_order_service)):
+    return service.create_order(data)
 
 @router.post("/department")
-def change_department(data: OrderItem, db: AsyncSession = Depends(get_db)):
-    return OrderItem(
-        order_id=uuid.uuid4(),
-        department_id=data.department_id,
-        from_user_id=uuid.uuid4(),
-        worker_id=uuid.uuid4(),
-        title=data.title,
-        description=data.description,
-        status=Status.NOT_STARTED,
-        created_at=datetime(2026, 3, 13, 17, 17, 17),
-        finished_at=None
-    )
+def change_department(data: SetDepartmentRequest, db: AsyncSession = Depends(get_db),service: OrderService = Depends(get_order_service)):
+    return service.set_department(data)
 
 @router.post("/get_orders")
-def get_orders(data: CreateOrderRequest, db: AsyncSession = Depends(get_db)):
-    order = OrderItem(
-        order_id=uuid.uuid4(),
-        department_id=data.department_id,
-        from_user_id=uuid.uuid4(),
-        worker_id=uuid.uuid4(),
-        title=data.title,
-        description=data.description,
-        status=Status.NOT_STARTED,
-        created_at=datetime(2026, 3, 13, 17, 17, 17),
-        finished_at=None
-    )
-    return GetOrdersResponse(
-        items = [order],
-        page = 1,
-        length = 1
+def get_orders(filters: OrderFilter, db: AsyncSession = Depends(get_db),service: OrderService = Depends(get_order_service)):
+    return service.get_orders(filters)
 
-    )
+
 
 @router.post("/change_status")
-def change_status(data: OrderItem, db: AsyncSession = Depends(get_db)):
-    return OrderItem(
-        order_id=uuid.uuid4(),
-        department_id=data.department_id,
-        from_user_id=uuid.uuid4(),
-        worker_id=uuid.uuid4(),
-        title=data.title,
-        description=data.description,
-        status=Status.NOT_STARTED,
-        created_at=datetime(2026, 3, 13, 17, 17, 17),
-        finished_at=None
-    )
+def change_status(data: UpdateOrderStatusRequest, db: AsyncSession = Depends(get_db),service: OrderService = Depends(get_order_service)):
+    return service.update_order_status(data)
 
 @router.post("/set_worker")
-def set_worker(data: OrderItem, db: AsyncSession = Depends(get_db)):
-    return OrderItem(
-        order_id=uuid.uuid4(),
-        department_id=data.department_id,
-        from_user_id=uuid.uuid4(),
-        worker_id=uuid.uuid4(),
-        title=data.title,
-        description=data.description,
-        status=Status.NOT_STARTED,
-        created_at=datetime(2026, 3, 13, 17, 17, 17),
-        finished_at=None
-    )
+def set_worker(data: SetWorkerRequest, db: AsyncSession = Depends(get_db),service: OrderService = Depends(get_order_service)):
+    return service.set_worker(data)
