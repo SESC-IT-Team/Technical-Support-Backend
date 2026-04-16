@@ -1,10 +1,10 @@
 import uuid
 from typing import Optional, List
-
-from pydantic import BaseModel, Field
 from datetime import datetime
 
-from enums import Status, SortOrder, OrdersQuery
+from pydantic import BaseModel, Field
+
+from src.enums import Status, SortOrder, OrdersQuery
 
 
 class OrderFilter(BaseModel):

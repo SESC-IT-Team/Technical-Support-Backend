@@ -1,5 +1,6 @@
-from enums import Status
-from orders.order_schemas import UpdateOrderStatusRequest, SetWorkerRequest, SetDepartmentRequest
+from src.database.session import get_db
+from src.enums import Status
+from src.orders.order_schemas import UpdateOrderStatusRequest, SetWorkerRequest, SetDepartmentRequest
 from src.orders.order_repository import OrderRepository
 from src.orders.order_schemas import OrderFilter, GetOrdersResponse, CreateOrderRequest
 
@@ -46,5 +47,6 @@ class OrderService:
             order_id=data.order_id,
             department_id=data.department_id
         )
-def get_order_service():
-    return OrderService(OrderRepository())
+
+async def get_order_service():
+    return OrderService(OrderRepository(get_db()))

@@ -5,8 +5,8 @@ from typing import Optional
 from sqlalchemy import select, update, desc, asc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from enums import OrdersQuery, Status, SortOrder
-from orders.order_model import Order
+from src.enums import OrdersQuery, Status, SortOrder
+from src.orders.order_model import Order
 
 
 class OrderRepository:
