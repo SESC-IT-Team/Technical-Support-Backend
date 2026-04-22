@@ -25,6 +25,8 @@ class TechSupportAuth(LyceumAuth):
         else:
             try:
                 allowed_roles.remove(Role.student)
+                allowed_roles.remove(Role.parent)
+
             except ValueError:
                 pass
 
