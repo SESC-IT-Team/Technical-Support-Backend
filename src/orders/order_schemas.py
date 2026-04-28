@@ -8,7 +8,6 @@ from src.enums import Status, SortOrder, OrdersQuery
 
 
 class OrderFilter(BaseModel):
-    user_id: uuid.UUID
     page: int = Field(default=1, ge=1)
     length: int = Field(default=10, ge=1)
     category: OrdersQuery = OrdersQuery.ALL
@@ -19,7 +18,6 @@ class OrderFilter(BaseModel):
 class OrderItem(BaseModel):
     order_id: uuid.UUID
     department_id: uuid.UUID
-    from_user_id: uuid.UUID
     worker_id: uuid.UUID
     title: str
     description: str

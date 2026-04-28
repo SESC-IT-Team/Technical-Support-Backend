@@ -15,7 +15,6 @@ RUN uv sync --no-dev
 # Копируем весь проект
 COPY . .
 
-
 ENV PYTHONPATH=/app
 
 CMD ["uv", "run", "python", "-m", "src.main"]

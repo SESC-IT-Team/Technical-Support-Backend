@@ -1,22 +1,27 @@
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from src.database.session import get_db
 from src.enums import Status
 from src.orders.order_schemas import UpdateOrderStatusRequest, SetWorkerRequest, SetDepartmentRequest
 from src.orders.order_repository import OrderRepository
 from src.orders.order_schemas import OrderFilter, GetOrdersResponse, CreateOrderRequest
+from utils.custom_auth.custom_auth import TechSupportUser
 
 
 class OrderService:
     def __init__(self, repository: OrderRepository):
         self.repo = repository
 
-    async def create_order(self, data: CreateOrderRequest):
+    async def create_order(self, data: CreateOrderRequest, user: TechSupportUser):
         order_data = data.model_dump()
         order_data['status'] = Status.NOT_STARTED
+        order_data['from_user_id'] = user.id
         return await self.repo.create_order(order_data)
 
-    async def get_orders(self, filters: OrderFilter):
+    async def get_orders(self, filters: OrderFilter, user: TechSupportUser):
         orders = await self.repo.get_orders(
-            user_id=filters.user_id,
+            user_id=user.id,
             page=filters.page,
             length=filters.length,
             category=filters.category,
@@ -48,5 +53,5 @@ class OrderService:
             department_id=data.department_id
         )
 
-async def get_order_service():
-    return OrderService(OrderRepository(get_db()))
+async def get_order_service(session: AsyncSession = Depends(get_db)):
+    return OrderService(OrderRepository(session))
