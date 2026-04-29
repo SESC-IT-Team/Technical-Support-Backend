@@ -3,6 +3,8 @@ FROM python:3.12-alpine
 WORKDIR /app
 
 RUN apk add git
+RUN apk add python3-tests
+
 # Установка Poetry и UV
 RUN pip install --no-cache-dir uv
 

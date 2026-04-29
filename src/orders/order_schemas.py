@@ -18,7 +18,7 @@ class OrderFilter(BaseModel):
 class OrderItem(BaseModel):
     order_id: uuid.UUID
     department_id: uuid.UUID
-    worker_id: uuid.UUID
+    worker_id: Optional[uuid.UUID] = None
     title: str
     description: str
     #photos
@@ -39,9 +39,9 @@ class CreateOrderRequest(BaseModel):
     title: str
     description: str
 
-class UpdateOrderStatusRequest(BaseModel):
+class SetStatusRequest(BaseModel):
     order_id: uuid.UUID
-    status: Status
+    new_status: Status
 
 class SetWorkerRequest(BaseModel):
     order_id: uuid.UUID
