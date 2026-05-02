@@ -16,7 +16,8 @@ class OrderFilter(BaseModel):
     created_at_sort: Optional[SortOrder] = None
 
 class OrderItem(BaseModel):
-    order_id: uuid.UUID
+    id: uuid.UUID
+    from_user_id: uuid.UUID
     department_id: uuid.UUID
     worker_id: Optional[uuid.UUID] = None
     title: str
