@@ -16,9 +16,23 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      - traefik.http.routers.tech-support.rule=Host(`support.sesc-it-team.ru`)
-      - traefik.http.routers.tech-support.entrypoints=websecure
-      - traefik.http.routers.tech-support.tls.certresolver=letsencrypt
+
+      # HTTP router
+      - traefik.http.routers.tech-support.rule=Host(`sesc-it-team.ru`) && PathPrefix(`/support-back`)
+      - traefik.http.routers.tech-support.entrypoints=web
+      - traefik.http.routers.tech-support.middlewares=tech-support-strip
+
+      # HTTPS router
+      - traefik.http.routers.tech-support-secure.rule=Host(`sesc-it-team.ru`) && PathPrefix(`/support-back`)
+      - traefik.http.routers.tech-support-secure.entrypoints=websecure
+      - traefik.http.routers.tech-support-secure.tls=true
+      - traefik.http.routers.tech-support-secure.tls.certresolver=letsencrypt
+      - traefik.http.routers.tech-support-secure.middlewares=tech-support-strip
+
+      # Middleware: убрать /support-back перед отправкой в backend
+      - traefik.http.middlewares.tech-support-strip.stripprefix.prefixes=/support-back
+
+      # Service port
       - traefik.http.services.tech-support.loadbalancer.server.port=8123
 
   postgres:
