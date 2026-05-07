@@ -1,14 +1,13 @@
 import uuid
 from typing import Optional, List
-
-from pydantic import BaseModel, Field
 from datetime import datetime
 
-from enums import Status, SortOrder, OrdersQuery
+from pydantic import BaseModel, Field
+
+from src.enums import Status, SortOrder, OrdersQuery
 
 
 class OrderFilter(BaseModel):
-    user_id: uuid.UUID
     page: int = Field(default=1, ge=1)
     length: int = Field(default=10, ge=1)
     category: OrdersQuery = OrdersQuery.ALL
@@ -17,10 +16,10 @@ class OrderFilter(BaseModel):
     created_at_sort: Optional[SortOrder] = None
 
 class OrderItem(BaseModel):
-    order_id: uuid.UUID
-    department_id: uuid.UUID
+    id: uuid.UUID
     from_user_id: uuid.UUID
-    worker_id: uuid.UUID
+    department_id: uuid.UUID
+    worker_id: Optional[uuid.UUID] = None
     title: str
     description: str
     #photos
@@ -41,9 +40,9 @@ class CreateOrderRequest(BaseModel):
     title: str
     description: str
 
-class UpdateOrderStatusRequest(BaseModel):
+class SetStatusRequest(BaseModel):
     order_id: uuid.UUID
-    status: Status
+    new_status: Status
 
 class SetWorkerRequest(BaseModel):
     order_id: uuid.UUID

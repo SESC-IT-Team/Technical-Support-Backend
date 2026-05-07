@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: technical-support-backend
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - app_network
+      - traefik-public
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.http.routers.tech-support.rule=Host(`support.sesc-it-team.ru`)
+      - traefik.http.routers.tech-support.entrypoints=websecure
+      - traefik.http.routers.tech-support.tls.certresolver=letsencrypt
+      - traefik.http.services.tech-support.loadbalancer.server.port=8123
+
+  postgres:
+    image: postgres:16
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
+  traefik-public:
+    external: true
+    name: traefik-public
