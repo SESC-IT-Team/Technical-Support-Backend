@@ -14,7 +14,7 @@ async def create_order(data: CreateOrderRequest = Depends(), service: OrderServi
                        user: JwtUserSchema = Depends(LyceumAuth(required_permissions=[Permissions.TechnicalSupport.Orders.create]))) -> OrderItem:
     return await service.create_order(data, user)
 
-@router.post("/get_orders")
+@router.get("/get_orders")
 async def get_orders(filters: OrderFilter = Depends(), service: OrderService = Depends(get_order_service),
                      user: JwtUserSchema = Depends(LyceumAuth(required_permissions=[Permissions.TechnicalSupport.Orders.get]))) -> GetOrdersResponse:
     return await service.get_orders(filters, user)

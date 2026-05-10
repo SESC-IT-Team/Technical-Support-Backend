@@ -15,4 +15,4 @@ class Settings(BaseSettings):
 
     root_path: str = "/"
 
-settings = Settings(postgres_host='', postgres_port=0, postgres_user='', postgres_password='', postgres_db='')
+settings = Settings()
