@@ -16,15 +16,12 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
-      - traefik.http.routers.tech-support.rule=Host(`${DOMAIN}`) && PathPrefix(`/support-back`)
+      - traefik.http.routers.tech-support.rule=Host(`${API_DOMAIN:-api.${DOMAIN}}`)
       - traefik.http.routers.tech-support.entrypoints=web
-      - traefik.http.routers.tech-support.middlewares=tech-support-strip
-      - traefik.http.routers.tech-support-secure.rule=Host(`${DOMAIN}`) && PathPrefix(`/support-back`)
+      - traefik.http.routers.tech-support-secure.rule=Host(`${API_DOMAIN:-api.${DOMAIN}}`)
       - traefik.http.routers.tech-support-secure.entrypoints=websecure
       - traefik.http.routers.tech-support-secure.tls=true
       - traefik.http.routers.tech-support-secure.tls.certresolver=letsencrypt
-      - traefik.http.routers.tech-support-secure.middlewares=tech-support-strip
-      - traefik.http.middlewares.tech-support-strip.stripprefix.prefixes=/support-back
       - traefik.http.services.tech-support.loadbalancer.server.port=8123
 
   postgres:
