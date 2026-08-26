@@ -22,3 +22,5 @@ class Order(Base):
     status: Mapped[Status] = mapped_column(Enum(Status), default=Status.NOT_STARTED, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, nullable=False)
     finished_at: Mapped[datetime] = mapped_column(DateTime, default=None, nullable=True)
+    started_at: Mapped[datetime] = mapped_column(DateTime, default=None, nullable=True)
+    worker_attached_at: Mapped[datetime] = mapped_column(DateTime, default=None, nullable=True)

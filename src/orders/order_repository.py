@@ -73,6 +73,8 @@ class OrderRepository:
         stmt = update(Order).where(Order.id == order_id).values(status=status)
         if status == Status.DONE:
             stmt = stmt.values(finished_at=datetime.now())
+        if status == Status.IN_PROGRESS:
+            stmt = stmt.values(started_at=datetime.now())
         stmt = stmt.returning(Order)
         result = await self.session.execute(stmt)
         order = result.scalar_one_or_none()
@@ -82,7 +84,7 @@ class OrderRepository:
         return order
 
     async def update_worker(self, order_id: uuid.UUID, worker_id: uuid.UUID):
-        stmt = update(Order).where(Order.id == order_id).values(worker_id=worker_id)
+        stmt = update(Order).where(Order.id == order_id).values(worker_id=worker_id,worker_attached_at=datetime.now())
         stmt = stmt.returning(Order)
         result = await self.session.execute(stmt)
         order = result.scalar_one_or_none()
