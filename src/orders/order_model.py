@@ -2,9 +2,8 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, DateTime, Enum, ARRAY
+from sqlalchemy import String, DateTime, Enum, ARRAY, JSON
 from sqlalchemy.dialects.postgresql import UUID
-
 from src.database.base import Base
 from src.enums import Status
 
@@ -17,7 +16,9 @@ class Order(Base):
     worker_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), default=None, nullable=True)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str] = mapped_column(String(511), nullable=False)
-    photos: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
+    photos: Mapped[list[str]] = mapped_column(
+        ARRAY(String).with_variant(JSON, "sqlite"), default=list, nullable=False
+    )
     status: Mapped[Status] = mapped_column(Enum(Status), default=Status.NOT_STARTED, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, nullable=False)
     finished_at: Mapped[datetime] = mapped_column(DateTime, default=None, nullable=True)

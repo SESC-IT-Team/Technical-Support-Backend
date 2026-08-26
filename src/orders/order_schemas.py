@@ -2,9 +2,9 @@ import uuid
 from typing import Optional, List
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
-from src.enums import Status, SortOrder, OrdersQuery
+from src.enums import Status, OrdersQuery
 
 
 class OrderFilter(BaseModel):
@@ -13,41 +13,37 @@ class OrderFilter(BaseModel):
     category: OrdersQuery = OrdersQuery.ALL
     department_id: Optional[uuid.UUID] = None
     status: Optional[Status] = None
-    created_at_sort: Optional[SortOrder] = None
 
-class OrderItem(BaseModel):
+
+class OrderRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     from_user_id: uuid.UUID
     department_id: uuid.UUID
     worker_id: Optional[uuid.UUID] = None
     title: str
     description: str
-    #photos
+    photos: List[str]
     status: Status
     created_at: datetime
     finished_at: Optional[datetime] = None
 
-    class Config:
-        from_attributes = True
 
-class GetOrdersResponse(BaseModel):
-    items: List[OrderItem]
+class OrderListResponse(BaseModel):
+    items: List[OrderRead]
     page: int
     length: int
+    total: int
 
-class CreateOrderRequest(BaseModel):
-    department_id: uuid.UUID
-    title: str
-    description: str
 
-class SetStatusRequest(BaseModel):
-    order_id: uuid.UUID
-    new_status: Status
+class OrderStatusUpdate(BaseModel):
+    status: Status
 
-class SetWorkerRequest(BaseModel):
-    order_id: uuid.UUID
+
+class OrderWorkerUpdate(BaseModel):
     worker_id: uuid.UUID
 
-class SetDepartmentRequest(BaseModel):
-    order_id: uuid.UUID
+
+class OrderDepartmentUpdate(BaseModel):
     department_id: uuid.UUID

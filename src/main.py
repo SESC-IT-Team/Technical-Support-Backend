@@ -3,9 +3,11 @@ from fastapi import FastAPI
 
 from src.config import settings
 from src.orders.order_router import router as order_router
+from src.utils.auth.auth_router import auth_router
 
 app = FastAPI(root_path=settings.root_path)
 app.include_router(order_router)
+app.include_router(auth_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8123)

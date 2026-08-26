@@ -4,6 +4,18 @@ members = ["packages/other-package"]
 [tool.uv.sources]
 sesc-auth-sdk = { git = "https://github.com/SESC-IT-Team/Lyceum-Auth-SDK.git" }
 
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = [
+    "slow: медленные тесты",
+    "integration: интеграционные тесты",
+    "unit: юнит-тесты",
+]
+asyncio_mode = "auto"
+
 [project]
 name = "technical-support-backend"
 version = "0.1.0"
@@ -19,5 +31,13 @@ dependencies = [
     "uvicorn>=0.40.0",
     "sqlalchemy>=2.0.47",
     "psycopg[binary]>=3.0.0",
-    "sesc-auth-sdk>=1.0.0",
+    "sesc-auth-sdk>=2.0.0",
+    "aioboto3>=15.0.0",
+    "pytest>=9.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "aiosqlite>=0.22.1",
+    "pytest-asyncio>=1.4.0",
 ]
