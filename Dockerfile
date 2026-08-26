@@ -1,8 +1,8 @@
-FROM python:3.12-alpine
+FROM python:3.13-alpine
 
 WORKDIR /app
 
-RUN apk add git
+RUN apk add --no-cache git ca-certificates
 RUN apk add python3-tests
 
 # Установка Poetry и UV
